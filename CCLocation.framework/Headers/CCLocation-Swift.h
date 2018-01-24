@@ -115,6 +115,7 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 # define SWIFT_UNAVAILABLE __attribute__((unavailable))
 #endif
 #if defined(__has_feature) && __has_feature(modules)
+@import CoreBluetooth;
 @import ObjectiveC;
 @import CoreLocation;
 @import Foundation;
@@ -124,6 +125,10 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 
 #pragma clang diagnostic ignored "-Wproperty-attribute-mismatch"
 #pragma clang diagnostic ignored "-Wduplicate-method-arg"
+
+@interface CBCentralManager (SWIFT_EXTENSION(CCLocation))
+@end
+
 
 SWIFT_CLASS("_TtC10CCLocation10CCLocation")
 @interface CCLocation : NSObject
@@ -149,6 +154,7 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) CCLocation *
 SWIFT_CLASS("_TtC10CCLocation17CCLocationManager")
 @interface CCLocationManager : NSObject <CLLocationManagerDelegate>
 @property (nonatomic, weak) id <CCLocationManagerDelegate> _Nullable delegate;
+- (void)stopAllLocationObservations;
 - (nonnull instancetype)init SWIFT_UNAVAILABLE;
 @end
 
@@ -156,6 +162,11 @@ SWIFT_CLASS("_TtC10CCLocation17CCLocationManager")
 
 @interface CCLocationManager (SWIFT_EXTENSION(CCLocation))
 - (void)locationManager:(CLLocationManager * _Nonnull)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status;
+@end
+
+
+@interface CCLocationManager (SWIFT_EXTENSION(CCLocation)) <CBCentralManagerDelegate>
+- (void)centralManagerDidUpdateState:(CBCentralManager * _Nonnull)central;
 @end
 
 @class CLBeacon;
@@ -213,21 +224,6 @@ SWIFT_CLASS("_TtC10CCLocation18CCRequestMessaging")
 
 
 @interface CCRequestMessaging (SWIFT_EXTENSION(CCLocation))
-@end
-
-@class NSCoder;
-
-SWIFT_CLASS("_TtC10CCLocation13ClientMessage")
-@interface ClientMessage : NSObject <NSCoding>
-@property (nonatomic, copy) NSData * _Nullable data;
-SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, copy) NSURL * _Nonnull DocumentsDirectory;)
-+ (NSURL * _Nonnull)DocumentsDirectory;
-SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, copy) NSURL * _Nonnull ArchiveURL;)
-+ (NSURL * _Nonnull)ArchiveURL;
-- (nonnull instancetype)init SWIFT_UNAVAILABLE;
-- (nullable instancetype)initWithData:(NSData * _Nonnull)data OBJC_DESIGNATED_INITIALIZER;
-- (void)encodeWithCoder:(NSCoder * _Nonnull)aCoder;
-- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder;
 @end
 
 #pragma clang diagnostic pop
